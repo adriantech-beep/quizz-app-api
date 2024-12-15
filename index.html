@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="media-querie.css" />
+    <script defer src="script.js"></script>
+    <title>API | Async-Await</title>
+  </head>
+  <body>
+    <div class="container">
+      <!--this is for the question text-->
+      <main class="display-title center">
+        <h1 class="roboto-condensed">
+          Welcome to <span class="roboto-condensed">API Quizz</span> app
+        </h1>
+        <p class="roboto">Pick a topic to continue</p>
+      </main>
+
+      <!--display the choices-->
+      <div class="choices-and-error-message__container">
+        <div class="choice-category__container center"></div>
+        <section class="display-choices">
+          <div class="options option-geography" id="select-one">
+            <div class="options-logo center">
+              <i class="fa-solid fa-book-atlas"></i>
+            </div>
+            <div class="options-content__box">
+              <p class="roboto">GEOGRAPHY</p>
+            </div>
+          </div>
+
+          <div class="options option-sports" id="select-two">
+            <div class="options-logo center">
+              <i class="fa-solid fa-medal"></i>
+            </div>
+            <div class="options-content__box">
+              <p class="roboto">SPORTS</p>
+            </div>
+          </div>
+
+          <div class="options option-science" id="select-three">
+            <div class="options-logo center">
+              <i class="fa-solid fa-flask"></i>
+            </div>
+            <div class="options-content__box">
+              <p class="roboto">SCIENCE</p>
+            </div>
+          </div>
+          <div class="options option-vehicles" id="select-four">
+            <div class="options-logo center">
+              <i class="fa-solid fa-car"></i>
+            </div>
+            <div class="options-content__box">
+              <p class="roboto">VEHICLES</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!--next button for next question-->
+      <!--downloaded from universe.io-->
+      <div class="button-container">
+        <button class="next-btn">
+          <span>Next question</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 74 74"
+            height="34"
+            width="34"
+          >
+            <circle
+              stroke-width="3"
+              stroke="black"
+              r="35.5"
+              cy="37"
+              cx="37"
+            ></circle>
+            <path
+              fill="black"
+              d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="correct-answer__modal center">
+        <i class="fa-regular fa-circle-check"></i>
+        <h1 class="roboto-condensed">You answered</h1>
+        <p class="selected-correct roboto"></p>
+      </div>
+      <div class="wrong-answer__modal center">
+        <i class="fa-regular fa-circle-xmark"></i>
+        <h1 class="roboto-condensed">You answered</h1>
+        <p class="selected-wrong roboto"></p>
+      </div>
+      <div class="score-container center hidden">
+        <h1 class="roboto">Your score</h1>
+        <h2 class="display-score roboto-condensed">10</h2>
+        <span class="roboto-condensed">/10</span>
+        <a class="play-again__btn roboto-condensed" href="index.html"
+          >Play Again</a
+        >
+      </div>
+    </div>
+    <!--for the error message of fetching data-->
+    <div class="fetch-error__overlay center hidden"></div>
+  </body>
+</html>
