@@ -19,10 +19,10 @@
   --color-light--2: #ececec;
   --color-light--3: rgb(214, 222, 224);
 }
-.roboto {
+.font-roboto {
   font-family: "Roboto", sans-serif;
 }
-.roboto-condensed {
+.font-roboto-condensed {
   font-family: "Roboto Condensed", sans-serif;
 }
 * {

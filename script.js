@@ -20,57 +20,44 @@ const choiceCategoryContainer = document.querySelector(
   ".choice-category__container"
 );
 
+const geographyCategoryUrl =
+  "https://opentdb.com/api.php?amount=10&category=22&difficulty=easy&type=multiple";
+const sportsCategoryUrl =
+  "https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple";
+const scienceCategoryUrl =
+  "https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple";
+const vehiclesCategoryUrl =
+  "https://opentdb.com/api.php?amount=10&category=28&difficulty=easy&type=multiple";
+
 addHiddenClass(buttonContainer);
 addHiddenClass(correctAnswerModal);
 addHiddenClass(wrongAnswerModal);
 
-let questions;
-let index = 0;
-let score = 0;
-
-const dataFetched = async function (url) {
-  try {
-    const response = await fetch(
-      `https://opentdb.com/api.php?amount=10&category=${url}&difficulty=easy&type=multiple`
-    );
-    if (!response.ok) throw new Error("Problem getting the data");
-
-    const data = await response.json();
-    console.log(data);
-
-    questions = data.results.map((result) => ({
-      category: result.category,
-      question: result.question,
-      correctAnswer: result.correct_answer,
-      wrongAnswers: result.incorrect_answers,
-    }));
-    displayQuestions(0);
-  } catch (error) {
-    removeHiddenClass(fetchErrorOverlay);
-    displayFetchError(error);
-  }
+const gameState = {
+  questions: [],
+  index: 0,
+  score: 0,
 };
 
 const displayQuestions = function (index) {
-  if (index < questions.length) {
-    const questionData = questions[index];
+  if (gameState.index < gameState.questions.length) {
+    const questionData = gameState.questions[gameState.index];
 
     const markUp = `
-    <h3 class="roboto-condensed">${questionData.question}</h3>
+    <h3 class="font-roboto-condensed">${questionData.question}</h3>
   `;
 
     displayTitle.innerHTML = "";
     displayTitle.insertAdjacentHTML("afterbegin", markUp);
 
     const categoryMarkUp = `
-          <h1 class="roboto-condensed">Category: <span class="roboto">${
+          <h1 class="font-roboto-condensed">Category: <span class="category-title font-roboto">${
             questionData.category
           }</span></h1>
-          <p class="roboto-condensed">question#<span class="roboto">${
-            index + 1
+          <p class="font-roboto-condensed">question#<span class="font-roboto">${
+            gameState.index + 1
           }</span>
                         `;
-
     choiceCategoryContainer.innerHTML = categoryMarkUp;
     const choices = [...questionData.wrongAnswers, questionData.correctAnswer];
 
@@ -82,7 +69,7 @@ const displayQuestions = function (index) {
     choices.forEach((choice, idx) => {
       const questionMarkUp = `
           <div class="options" id="select-${idx + 1}">
-            <p class="choices roboto-condensed">${choice}</p>
+            <p class="choices font-roboto-condensed">${choice}</p>
         </div>`;
       displayChoices.insertAdjacentHTML("beforeend", questionMarkUp);
     });
@@ -94,15 +81,44 @@ const displayQuestions = function (index) {
   } else {
     addHiddenClass(nextBtn);
     removeHiddenClass(scoreContainer);
-    displayScore.textContent = score;
+    displayScore.textContent = gameState.score;
   }
 };
 
+const dataFetched = async function (url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Problem getting the data");
+
+    const data = await response.json();
+
+    gameState.questions = data.results.map((result) => ({
+      category: result.category,
+      question: result.question,
+      correctAnswer: result.correct_answer,
+      wrongAnswers: result.incorrect_answers,
+    }));
+    displayQuestions(0);
+  } catch (errorMessage) {
+    removeHiddenClass(fetchErrorOverlay);
+    displayFetchError(errorMessage);
+  }
+};
+
+nextBtn.addEventListener("click", function () {
+  gameState.index++;
+  displayQuestions(gameState.index);
+  addHiddenClass(correctAnswerModal);
+  addHiddenClass(wrongAnswerModal);
+  removeBorderColor(container, "border-bottom__red");
+  removeBorderColor(container, "border-bottom__green");
+});
+
 function selectAnswer(selectedChoice, index) {
-  const questionData = questions[index];
+  const questionData = gameState.questions[index];
   const isCorrect = selectedChoice === questionData.correctAnswer;
   if (isCorrect) {
-    score++;
+    gameState.score++;
     removeHiddenClass(correctAnswerModal);
     addBorderColor(container, "border-bottom__green");
     selectedCorrect.innerHTML = selectedChoice;
@@ -111,26 +127,19 @@ function selectAnswer(selectedChoice, index) {
     addBorderColor(container, "border-bottom__red");
     selectedWrong.innerHTML = selectedChoice;
   }
-  nextBtn.addEventListener("click", function () {
-    displayQuestions(index + 1);
-    addHiddenClass(correctAnswerModal);
-    addHiddenClass(wrongAnswerModal);
-    removeBorderColor(container, "border-bottom__red");
-    removeBorderColor(container, "border-bottom__green");
-  });
 }
 
 function displayFetchError(error) {
   fetchErrorOverlay.innerHTML = "";
   const markUp = `<div class="fetch-error__modal center">
-      <h1 class="roboto-condensed">Oops!</h1>
+      <h1 class="font-roboto-condensed">Oops!</h1>
       <i class="fa-solid fa-xmark"></i>
-      <h2 class="roboto-condensed">${error}</h2>
-      <p class="roboto">
+      <h2 class="font-roboto-condensed">${error}</h2>
+      <p class="font-roboto">
         We encountered a problem while trying to connect with our server
       </p>
-      <p class="roboto">Please try again</p>
-      <button class="return-home__btn roboto">Return to home</button>
+      <p class="font-roboto">Please try again</p>
+      <button class="return-home__btn font-roboto">Return to home</button>
     </div>`;
 
   fetchErrorOverlay.insertAdjacentHTML("beforeend", markUp);
@@ -152,15 +161,11 @@ function removeHiddenClass(className) {
   className.classList.remove("hidden");
 }
 
-optionGeography.addEventListener("click", function () {
-  dataFetched(22);
-});
-optionSports.addEventListener("click", function () {
-  dataFetched(21);
-});
-optionScience.addEventListener("click", function () {
-  dataFetched(18);
-});
-optionVehicles.addEventListener("click", function () {
-  dataFetched(28);
-});
+optionGeography.addEventListener("click", () =>
+  dataFetched(geographyCategoryUrl)
+);
+optionSports.addEventListener("click", () => dataFetched(sportsCategoryUrl));
+optionScience.addEventListener("click", () => dataFetched(scienceCategoryUrl));
+optionVehicles.addEventListener("click", () =>
+  dataFetched(vehiclesCategoryUrl)
+);
